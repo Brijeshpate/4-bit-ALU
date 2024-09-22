@@ -33,3 +33,46 @@ module 4_alu (a,b,opcode,r,flag_c,flag_z);
  endcase
  end
 endmodule
+
+`timescale 1ns / 1ps
+
+module 4_alu_tb();
+    reg [15:0] a, b;
+    reg [3:0] opcode;
+    wire [15:0] r;
+    wire flag_c, flag_z;
+
+    4_alu uut (
+        .a(a), 
+        .b(b), 
+        .opcode(opcode), 
+        .r(r), 
+        .flag_c(flag_c), 
+        .flag_z(flag_z)
+    );
+
+    initial begin
+        $monitor("Time: %0d, a: %h, b: %h, opcode: %b, result: %h, flag_c: %b, flag_z: %b", 
+                  $time, a, b, opcode, r, flag_c, flag_z);
+        
+        a = 16'h0010; b = 16'h0002; opcode = 4'b0000; #10;
+        a = 16'h0010; b = 16'h0002; opcode = 4'b0001; #10;
+        a = 16'h0010; b = 16'h0002; opcode = 4'b0010; #10;
+        a = 16'h000F; opcode = 4'b0011; #10;
+        a = 16'h0010; opcode = 4'b0100; #10;
+        a = 16'h0001; b = 16'h0004; opcode = 4'b0101; #10;
+        a = 16'h0010; b = 16'h0002; opcode = 4'b0110; #10;
+        a = 16'hFFFF; b = 16'h00FF; opcode = 4'b0111; #10;
+        a = 16'h00F0; b = 16'h0F0F; opcode = 4'b1000; #10;
+        a = 16'hAAAA; b = 16'h5555; opcode = 4'b1001; #10;
+        a = 16'h000F; opcode = 4'b1010; #10;
+        b = 16'h000F; opcode = 4'b1011; #10;
+        a = 16'hFFFF; b = 16'h0000; opcode = 4'b1100; #10;
+        a = 16'h0000; b = 16'h0000; opcode = 4'b1101; #10;
+        a = 16'hAAAA; b = 16'hAAAA; opcode = 4'b1110; #10;
+        a = 16'h0001; b = 16'h0002; opcode = 4'b1111; #10;
+
+        $finish;
+    end
+endmodule
+
